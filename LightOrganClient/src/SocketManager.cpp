@@ -22,11 +22,8 @@ String SocketManager::getNextCommand()
 
     while (client.connected() && client.available())
     {
-        // if (client.available())
-        // {
-            lastLine = client.readStringUntil('\n');
-            Serial.println(lastLine);
-        // }
+        lastLine = client.readStringUntil('\n');
+        Serial.println(lastLine);
     }
 
     return lastLine;

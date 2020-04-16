@@ -25,14 +25,8 @@ void setup()
 // Loop
 void loop()
 {
-    // while (socketManager.client.connected() || socketManager.client.available())
-    // {
-    //     if (socketManager.client.available())
-    //     {
-    //         String line = socketManager.client.readStringUntil('\n');
-    //         Serial.println(line);
-    //     }
-    // }
   String next = socketManager.getNextCommand();
   Serial.println(next);
+  
+  //TODO: Write to LED
 }
