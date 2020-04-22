@@ -1,4 +1,7 @@
 #include "SocketManager.h"
+#include <ESP8266WiFi.h>
+
+WiFiClient client;
 
 void SocketManager::connectToSocket(const char *ip, const int port) //TODO: Add an LED could to send to the socket server
 {
@@ -18,11 +21,12 @@ RGB SocketManager::getNextCommand()
 {
     String lastLine;
 
-    // Grab the latest string; multiple may be waiting, but we only want the absolute newest.
-    while (client.connected() && client.available())
+    // Flush any pending messages and listen for the next message.
+    // We don't want to spend a bunch of time writing old data to the LED strip
+    client.flush();
+    while (client.connected() && lastLine.length() == 0)
     {
         lastLine = client.readStringUntil('\n');
-        Serial.println(lastLine);
     }
 
     // Convert from String to std::string

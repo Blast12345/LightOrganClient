@@ -35,28 +35,22 @@ void setup()
 void loop()
 {
   //TODO: Implement reconnect
-  
+
   RGB next = socketManager.getNextCommand();
 
+  //TODO: MOVE THIS TO LED MANAGER
   if (next.isValid() == false)
   {
-    // If a number is -1, then we are missing some data and we should exit this step in the loop.
     return;
   }
 
+  int r = next.red;
+  int g = next.green;
+  int b = next.blue;
+
   for (int i = 0; i < LED_TOTAL; i++)
   {
-    int r = next.red;
-    int g = next.green;
-    int b = next.blue;
     strand.setPixelColor(i, strand.Color(r, g, b));
-    Serial.println();
-    Serial.print(r);
-    Serial.print(",");
-    Serial.print(g);
-    Serial.print(",");
-    Serial.print(b);
-    Serial.println();
   }
 
   strand.show();
