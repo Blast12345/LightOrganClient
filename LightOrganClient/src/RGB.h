@@ -7,6 +7,6 @@ struct RGB
   int blue;
 
 public:
-  static RGB fromMessage(std::string message);
-  boolean isValid();
+  static std::vector<RGB> multipleFrom(std::string message);
+  static RGB singleFrom(std::string message);
 };

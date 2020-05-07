@@ -23,3 +23,8 @@ void WifiManager::connect(const char *ssid, const char *password)
     Serial.print("IP address:\t");
     Serial.println(WiFi.localIP()); // Send the IP address of the ESP8266 to the computer
 }
+
+boolean WifiManager::isConnected() 
+{
+    return WiFi.isConnected();
+}

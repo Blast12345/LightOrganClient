@@ -17,22 +17,36 @@ void SocketManager::connectToSocket(const char *ip, const int port) //TODO: Add 
     }
 }
 
-RGB SocketManager::getNextCommand()
+void SocketManager::sendLedCount(const int count) {
+    Serial.println("Preparing to set LED count.");
+
+    String ledCountString = "LEDCOUNT=" + String(count);
+    const char* array = ledCountString.c_str();
+    client.write(array);
+
+    Serial.println("Set LED count:" + ledCountString);
+}
+
+std::vector<RGB> SocketManager::getNextCommand()
 {
-    String lastLine;
+    Serial.println("Checking for next command...");
+
+    String message;
 
     // Flush any pending messages and listen for the next message.
     // We don't want to spend a bunch of time writing old data to the LED strip
     client.flush();
-    while (client.connected() && lastLine.length() == 0)
+    while (client.connected() && message.length() == 0)
     {
-        lastLine = client.readStringUntil('\n');
+        message = client.readStringUntil('\n');
     }
 
-    // Convert from String to std::string
-    const char *array = lastLine.c_str();
-    std::string output = array;
+    // Create RGBs from the full message
+    std::string messageC = message.c_str();
+    return RGB::multipleFrom(messageC);
+}
 
-    // Create an RGB struct given the string
-    return RGB::fromMessage(output);
-};
+boolean SocketManager::isConnected() 
+{
+    return client.connected();
+}

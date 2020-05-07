@@ -5,5 +5,7 @@ class SocketManager
 {
 public:
     void connectToSocket(const char *ip, const int port);
-    RGB getNextCommand();
+    void sendLedCount(const int count);
+    std::vector<RGB> getNextCommand();
+    boolean isConnected();
 };
