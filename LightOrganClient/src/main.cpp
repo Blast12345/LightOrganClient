@@ -35,6 +35,7 @@ void loop()
   // If WiFi is disconnected, attempt to connect
   if (WifiManager::isConnected() == false)
   {
+    strand.clear();
     WifiManager::connect(ssid, password);
     return;
   }
@@ -42,6 +43,7 @@ void loop()
   // If socket is disconnected, attempt to connect
   if (socketManager.isConnected() == false)
   {
+    strand.clear();
     socketManager.connectToSocket(serverIP, port);
     socketManager.sendLedCount(LED_COUNT);
     return;
