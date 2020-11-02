@@ -28,22 +28,41 @@ void SocketManager::sendLedCount(const int count) {
 }
 
 std::vector<RGB> SocketManager::getNextCommand()
-{
+{  
+    std::vector<RGB> output;
     Serial.println("Checking for next command...");
 
-    String message;
+    unsigned int length = 300 * 3;
+    uint8_t buffer[length];
 
-    // Flush any pending messages and listen for the next message.
-    // We don't want to spend a bunch of time writing old data to the LED strip
     client.flush();
-    while (client.connected() && message.length() == 0)
+    while (client.connected() && client.available() < length)
     {
-        message = client.readStringUntil('\n');
+        delay(1);
     }
 
-    // Create RGBs from the full message
-    std::string messageC = message.c_str();
-    return RGB::multipleFrom(messageC);
+    Serial.println("Got data...");
+    Serial.println(client.available());
+
+    client.readBytes(buffer, length);
+    
+    //Process data
+    // unsigned char temp[3];
+    // for (uint i = 0; i < length; i+=3)
+    // {
+    //     temp[0] = buffer[i + 0];
+    //     temp[1] = buffer[i + 1];
+    //     temp[2] = buffer[i + 2];
+    //     RGB color = RGB::singleFrom(temp);
+    //     output.push_back(color);
+    // }
+
+    // unsigned long start = micros();
+    // unsigned long end = micros();
+    // Serial.println(end - start);
+    delay(1000);
+
+    return output;
 }
 
 boolean SocketManager::isConnected() 

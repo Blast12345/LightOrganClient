@@ -61,3 +61,25 @@ RGB RGB::singleFrom(std::string message)
 
     return output;
 }
+
+// Byte Arrays
+std::vector<RGB> RGB::multipleFrom(unsigned char *data){
+    std::vector<RGB> output;
+
+    // for (uint i = 0; i < sizeof(data); i+3)
+    // {
+
+    // }
+
+    return output;
+}
+
+RGB RGB::singleFrom(unsigned char *data) {
+    RGB output;
+
+    output.red = data[0];
+    output.green = data[1];
+    output.blue = data[2];
+    
+    return output;
+}
