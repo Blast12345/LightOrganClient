@@ -50,9 +50,11 @@ void loop()
   }
 
   //If connected to the socket, then attempt to retrieve the next command and update the
-  std::vector<RGB> colors = socketManager.getNextCommand();
+  // NOTE: Peforming as expected, though information stacks up at 300 pixels @ 100hz on ESP8266
+  std::vector<RGB> colors = socketManager.getNextCommand(LED_COUNT); 
 
-  //TODO: Create NeopixelManager?
+  unsigned long start = micros();
+
   for (uint i = 0; i < colors.size(); i++)
   {
     RGB color = colors[i];
@@ -66,4 +68,18 @@ void loop()
 
   Serial.println("Setting pixels...");
   strand.show();
+
+  unsigned long end = micros();
+  Serial.println(end - start);
 }
+
+
+  //TODO: Create NeopixelManager?
+
+
+  // Serial.println("Setting pixels...");
+  // strand.show();
+
+  // unsigned long end = micros();
+  // Serial.println("Full loop duration: ");
+  // Serial.print(end - start);
