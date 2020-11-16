@@ -1,5 +1,5 @@
 #include "SocketManager.h"
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 
 WiFiClient client;
 
