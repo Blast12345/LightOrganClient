@@ -4,6 +4,6 @@
 class WifiManager
 {
 public:
-    static void connect(const char *ssid, const char *password);
     static boolean isConnected();
+    static void connect(const char *ssid, const char *password);
 };

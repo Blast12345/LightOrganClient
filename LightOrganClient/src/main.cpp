@@ -1,7 +1,8 @@
 // Imports
-#include <Adafruit_NeoPixel.h>
 #include "WifiManager.h"
 #include "SocketManager.h"
+#include "FastLED.h"
+#include <sstream>
 
 // WiFi Configuration
 const char *ssid = "LightOrgan";          // The SSID (name) of the Wi-Fi network you want to connect to
@@ -10,12 +11,12 @@ const char *serverIP = "192.168.4.1";     // The IP address of the Raspberry Pi 
 const int port = 9999;                    // The port of the socket we want to connect to
 
 //LED Configuration
-const int LED_COUNT = 300;
+const int LED_COUNT = 12;
 const int LED_PIN = 13;
 
 //State
 SocketManager socketManager;
-Adafruit_NeoPixel strand = Adafruit_NeoPixel(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+CRGB leds[LED_COUNT];
 
 // Setup
 void setup()
@@ -25,8 +26,7 @@ void setup()
   delay(10);            // Suggested wait to reduce issues with WiFi. Not sure if needed
 
   // Setup neopixel strand
-  strand.begin();
-  strand.clear();
+  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_COUNT);
 }
 
 // Loop
@@ -35,7 +35,6 @@ void loop()
   // If WiFi is disconnected, attempt to connect
   if (WifiManager::isConnected() == false)
   {
-    strand.clear();
     WifiManager::connect(ssid, password);
     return;
   }
@@ -43,27 +42,35 @@ void loop()
   // If socket is disconnected, attempt to connect
   if (socketManager.isConnected() == false)
   {
-    strand.clear();
     socketManager.connectToSocket(serverIP, port);
     socketManager.sendLedCount(LED_COUNT);
     return;
   }
 
-  //If connected to the socket, then attempt to retrieve the next command and update the
-  std::vector<RGB> colors = socketManager.getNextCommand();
+  // If connected to the socket, then attempt to retrieve the next command
+  String command = socketManager.getNextCommand();
 
-  //TODO: Create NeopixelManager?
-  for (uint i = 0; i < colors.size(); i++)
+  // Turn our command string into hex codes
+  std::string commandC = command.c_str();
+  std::vector<std::string> hexCodes;
+  std::stringstream s_stream(commandC);
+
+  while (s_stream.good())
   {
-    RGB color = colors[i];
-
-    int r = color.red;
-    int g = color.green;
-    int b = color.blue;
-
-    strand.setPixelColor(i, strand.Color(r, g, b));
+      std::string led;
+      getline(s_stream, led, '|');
+      hexCodes.push_back(led);
   }
 
+  //TODO: Create NeopixelManager?
   Serial.println("Setting pixels...");
-  strand.show();
+
+  for (uint i = 0; i < hexCodes.size(); i++)
+  {
+    std::string codeString = hexCodes[i];
+    long codeLong = strtol(codeString.c_str(), NULL, 16);
+    leds[i].setColorCode(codeLong);
+  }
+
+  FastLED.show();
 }

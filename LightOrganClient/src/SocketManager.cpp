@@ -3,7 +3,12 @@
 
 WiFiClient client;
 
-void SocketManager::connectToSocket(const char *ip, const int port) //TODO: Add an LED could to send to the socket server
+boolean SocketManager::isConnected() 
+{
+    return client.connected();
+}
+
+void SocketManager::connectToSocket(const char *ip, const int port)
 {
     Serial.println("Connecting to socket");
 
@@ -27,7 +32,7 @@ void SocketManager::sendLedCount(const int count) {
     Serial.println("Set LED count:" + ledCountString);
 }
 
-std::vector<RGB> SocketManager::getNextCommand()
+String SocketManager::getNextCommand()
 {
     Serial.println("Checking for next command...");
 
@@ -35,18 +40,13 @@ std::vector<RGB> SocketManager::getNextCommand()
 
     // Flush any pending messages and listen for the next message.
     // We don't want to spend a bunch of time writing old data to the LED strip
-    client.flush();
+    // client.flush();
     while (client.connected() && message.length() == 0)
     {
         message = client.readStringUntil('\n');
     }
 
-    // Create RGBs from the full message
-    std::string messageC = message.c_str();
-    return RGB::multipleFrom(messageC);
-}
+    Serial.println("Retrieved next command...");
 
-boolean SocketManager::isConnected() 
-{
-    return client.connected();
+    return message;
 }

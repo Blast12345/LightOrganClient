@@ -1,5 +1,10 @@
 #include "WifiManager.h"
 
+boolean WifiManager::isConnected() 
+{
+    return WiFi.isConnected();
+}
+
 void WifiManager::connect(const char *ssid, const char *password)
 {
     //Attempt to connect to WiFi
@@ -22,9 +27,4 @@ void WifiManager::connect(const char *ssid, const char *password)
     Serial.println("Connection established!");
     Serial.print("IP address:\t");
     Serial.println(WiFi.localIP()); // Send the IP address of the ESP8266 to the computer
-}
-
-boolean WifiManager::isConnected() 
-{
-    return WiFi.isConnected();
 }
