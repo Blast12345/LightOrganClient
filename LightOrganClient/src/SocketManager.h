@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include "RGB.h"
 
 class SocketManager
 {
