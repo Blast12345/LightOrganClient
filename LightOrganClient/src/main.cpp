@@ -1,8 +1,8 @@
 // Imports
+#include "FastLED.h"
 #include "WifiManager.h"
 #include "SocketManager.h"
-#include "FastLED.h"
-#include <sstream>
+#include "CommandParser.h"
 
 // WiFi Configuration
 const char *ssid = "LightOrgan";          // The SSID (name) of the Wi-Fi network you want to connect to
@@ -11,7 +11,7 @@ const char *serverIP = "192.168.4.1";     // The IP address of the Raspberry Pi 
 const int port = 9999;                    // The port of the socket we want to connect to
 
 //LED Configuration
-const int LED_COUNT = 12;
+const int LED_COUNT = 300;
 const int LED_PIN = 13;
 
 //State
@@ -48,28 +48,18 @@ void loop()
   }
 
   // If connected to the socket, then attempt to retrieve the next command
-  String command = socketManager.getNextCommand();
+  std::string command = socketManager.getNextCommand();
 
   // Turn our command string into hex codes
-  std::string commandC = command.c_str();
-  std::vector<std::string> hexCodes;
-  std::stringstream s_stream(commandC);
+  std::vector<uint32_t> colors = CommandParser::parseCommand(command);
 
-  while (s_stream.good())
-  {
-      std::string led;
-      getline(s_stream, led, '|');
-      hexCodes.push_back(led);
-  }
-
-  //TODO: Create NeopixelManager?
+  // Deploy our colors to the neopixels
   Serial.println("Setting pixels...");
 
-  for (uint i = 0; i < hexCodes.size(); i++)
+  for (uint i = 0; i < colors.size(); i++)
   {
-    std::string codeString = hexCodes[i];
-    long codeLong = strtol(codeString.c_str(), NULL, 16);
-    leds[i].setColorCode(codeLong);
+    uint32_t color = colors[i];
+    leds[i].setColorCode(color);
   }
 
   FastLED.show();

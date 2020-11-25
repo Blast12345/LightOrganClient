@@ -32,7 +32,7 @@ void SocketManager::sendLedCount(const int count) {
     Serial.println("Set LED count:" + ledCountString);
 }
 
-String SocketManager::getNextCommand()
+std::string SocketManager::getNextCommand()
 {
     Serial.println("Checking for next command...");
 
@@ -46,7 +46,10 @@ String SocketManager::getNextCommand()
         message = client.readStringUntil('\n');
     }
 
+    Serial.print("Remaining Characters: ");
+    Serial.println(client.available());
+
     Serial.println("Retrieved next command...");
 
-    return message;
+    return message.c_str();
 }
