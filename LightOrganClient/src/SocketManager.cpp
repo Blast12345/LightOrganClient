@@ -3,7 +3,7 @@
 
 WiFiClient client;
 
-boolean SocketManager::isConnected() 
+boolean SocketManager::isConnected()
 {
     return client.connected();
 }
@@ -22,34 +22,44 @@ void SocketManager::connectToSocket(const char *ip, const int port)
     }
 }
 
-void SocketManager::sendLedCount(const int count) {
+void SocketManager::sendLedCount(const int count)
+{
     Serial.println("Preparing to set LED count.");
 
     String ledCountString = "LEDCOUNT=" + String(count);
-    const char* array = ledCountString.c_str();
+    const char *array = ledCountString.c_str();
     client.write(array);
 
     Serial.println("Set LED count:" + ledCountString);
 }
 
+bool test = false;
+
 std::string SocketManager::getNextCommand()
 {
-    Serial.println("Checking for next command...");
+    unsigned long start = micros();
 
-    String message;
+    // Serial.println("Checking for next command...");
 
-    // Flush any pending messages and listen for the next message.
-    // We don't want to spend a bunch of time writing old data to the LED strip
+    // TODO: Flush isn't working
+    // flush(): fail on fd 56, errno: 11, "No more processes"
     // client.flush();
+
+    // We need to read in our next command; wait until command is available.
+    String message;
     while (client.connected() && message.length() == 0)
     {
         message = client.readStringUntil('\n');
+        // while (client.available() > 0 && client.find('\n')) {
+        //     message = client.readStringUntil('\n');
+        // }
     }
 
-    Serial.print("Remaining Characters: ");
-    Serial.println(client.available());
-
-    Serial.println("Retrieved next command...");
+    // Serial.println(message);
+    // Serial.println("Retrieved next command...");
+    unsigned long end = micros();
+    Serial.print("Time: ");
+    Serial.println(end - start);
 
     return message.c_str();
 }
