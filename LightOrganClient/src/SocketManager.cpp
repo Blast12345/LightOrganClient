@@ -37,9 +37,9 @@ bool test = false;
 
 std::string SocketManager::getNextCommand()
 {
-    unsigned long start = micros();
-
     // Serial.println("Checking for next command...");
+
+    unsigned long start = micros();
 
     // TODO: Flush isn't working
     // flush(): fail on fd 56, errno: 11, "No more processes"
@@ -50,16 +50,13 @@ std::string SocketManager::getNextCommand()
     while (client.connected() && message.length() == 0)
     {
         message = client.readStringUntil('\n');
-        // while (client.available() > 0 && client.find('\n')) {
-        //     message = client.readStringUntil('\n');
-        // }
     }
 
-    // Serial.println(message);
-    // Serial.println("Retrieved next command...");
     unsigned long end = micros();
     Serial.print("Time: ");
     Serial.println(end - start);
+
+    // Serial.println("Retrieved next command...");
 
     return message.c_str();
 }
