@@ -1,69 +1,80 @@
-// Imports
-#include <Adafruit_NeoPixel.h>
+#include "FastLED.h"
 #include "WifiManager.h"
 #include "SocketManager.h"
+#include "CommandParser.h"
 
-// WiFi Configuration
-const char *ssid = "LightOrgan";          // The SSID (name) of the Wi-Fi network you want to connect to
-const char *password = "thecolorofmusic"; // The password of the Wi-Fi network
-const char *serverIP = "192.168.4.1";     // The IP address of the Raspberry Pi //TODO: Improve this comment
-const int port = 9999;                    // The port of the socket we want to connect to
-
-//LED Configuration
+// Configuration
+const char *ssid = "-";     // The SSID (name) of the Wi-Fi network you want to connect to
+const char *password = "-"; // The password of the Wi-Fi network
+const char *serverIP = "-"; // The IP address of the Raspberry Pi //TODO: Improve this comment
+const int port = 9999;      // The port of the socket we want to connect to
 const int LED_COUNT = 300;
 const int LED_PIN = 13;
 
-//State
+// State
+WifiManager wifiManager;
 SocketManager socketManager;
-Adafruit_NeoPixel strand = Adafruit_NeoPixel(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+CRGB leds[LED_COUNT];
 
 // Setup
+void configureSerialOutput()
+{
+  Serial.begin(115200);
+}
+
+void warmupForWifi()
+{
+  // NOTE: Connecting to wifi immediately resulted in messages not being received.
+  delay(10);
+}
+
+void connectToWifi()
+{
+  wifiManager.connect(ssid, password);
+}
+
+void connectToSocket()
+{
+  socketManager.connectToSocket(port);
+}
+
+void configureNeopixels()
+{
+  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_COUNT);
+}
+
 void setup()
 {
-  // Basic setup
-  Serial.begin(115200); // Start the Serial communication to send messages to the computer
-  delay(10);            // Suggested wait to reduce issues with WiFi. Not sure if needed
 
-  // Setup neopixel strand
-  strand.begin();
-  strand.clear();
+  configureSerialOutput();
+  warmupForWifi();
+  connectToWifi();
+  connectToSocket();
+  configureNeopixels();
 }
 
 // Loop
-void loop()
+void reconnectToWifiIfNeeded()
 {
-  // If WiFi is disconnected, attempt to connect
-  if (WifiManager::isConnected() == false)
-  {
-    strand.clear();
-    WifiManager::connect(ssid, password);
-    return;
-  }
+  wifiManager.connectIfNeeded(ssid, password);
+}
 
-  // If socket is disconnected, attempt to connect
-  if (socketManager.isConnected() == false)
-  {
-    strand.clear();
-    socketManager.connectToSocket(serverIP, port);
-    socketManager.sendLedCount(LED_COUNT);
-    return;
-  }
+void setAllLedsToColor(uint32_t color)
+{
+  Serial.println("Setting pixels...");
 
-  //If connected to the socket, then attempt to retrieve the next command and update the
-  std::vector<RGB> colors = socketManager.getNextCommand();
-
-  //TODO: Create NeopixelManager?
   for (uint i = 0; i < colors.size(); i++)
   {
-    RGB color = colors[i];
-
-    int r = color.red;
-    int g = color.green;
-    int b = color.blue;
-
-    strand.setPixelColor(i, strand.Color(r, g, b));
+    uint32_t color = colors[i];
+    leds[i].setColorCode(color);
   }
 
-  Serial.println("Setting pixels...");
-  strand.show();
+  FastLED.show();
+}
+
+void loop()
+{
+  reconnectToWifiIfNeeded();
+  socketManager.getNextColor();
+  // setAllLedsToColor();
 }

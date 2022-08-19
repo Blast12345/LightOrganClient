@@ -1,9 +1,16 @@
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 
 class WifiManager
 {
 public:
-    static void connect(const char *ssid, const char *password);
-    static boolean isConnected();
+    void connectIfNeeded(const char *ssid, const char *password);
+    boolean isConnected();
+    void connect(const char *ssid, const char *password);
+private:
+    void startWifiConnection(const char *ssid, const char *password);
+    void printConnectingMessage(const char *ssid);
+    void waitForWifiConnection();
+    void printTimeAwaited(int timeAwaited);
+    void printConnectedMessage();
 };

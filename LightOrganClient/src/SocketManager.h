@@ -1,11 +1,11 @@
 #include <Arduino.h>
-#include "RGB.h"
 
 class SocketManager
 {
 public:
-    void connectToSocket(const char *ip, const int port);
-    void sendLedCount(const int count);
-    std::vector<RGB> getNextCommand();
-    boolean isConnected();
+    void connectToSocket(const int port);
+    void getNextColor();
+
+private:
+    void printListeningMessage(const int port);
 };
