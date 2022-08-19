@@ -3,3 +3,6 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+
+# Omit the configuration so that people don't accidentally commit private information.
+LightOrganClient/src/Configuration.h
