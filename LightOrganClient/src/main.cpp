@@ -2,19 +2,12 @@
 #include "WifiManager.h"
 #include "SocketManager.h"
 #include "CommandParser.h"
-
-// Configuration
-const char *ssid = "-";     // The SSID (name) of the Wi-Fi network you want to connect to
-const char *password = "-"; // The password of the Wi-Fi network
-const char *serverIP = "-"; // The IP address of the Raspberry Pi //TODO: Improve this comment
-const int port = 9999;      // The port of the socket we want to connect to
-const int LED_COUNT = 300;
-const int LED_PIN = 13;
+#include "Configuration.h"
 
 // State
 WifiManager wifiManager;
 SocketManager socketManager;
-CRGB leds[LED_COUNT];
+CRGB leds[ledCount];
 
 // Setup
 void configureSerialOutput()
@@ -40,7 +33,7 @@ void connectToSocket()
 
 void configureNeopixels()
 {
-  FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, LED_COUNT);
+  FastLED.addLeds<NEOPIXEL, ledPin>(leds, ledCount);
 }
 
 void setup()
@@ -63,9 +56,8 @@ void setAllLedsToColor(uint32_t color)
 {
   Serial.println("Setting pixels...");
 
-  for (uint i = 0; i < colors.size(); i++)
+  for (uint i = 0; i < ledCount; i++)
   {
-    uint32_t color = colors[i];
     leds[i].setColorCode(color);
   }
 
