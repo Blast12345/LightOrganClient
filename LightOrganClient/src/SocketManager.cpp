@@ -1,62 +1,65 @@
 #include "SocketManager.h"
+#include <WiFiUdp.h>
 #include <WiFi.h>
 
-WiFiClient client;
+WiFiUDP udp;
+char packet[255];
+char reply[] = "Packet received!";
 
-boolean SocketManager::isConnected()
+void SocketManager::connectToSocket(const int port)
 {
-    return client.connected();
+    udp.begin(port);
+    printListeningMessage(port);
 }
 
-void SocketManager::connectToSocket(const char *ip, const int port)
+void SocketManager::printListeningMessage(const int port)
 {
-    Serial.println("Connecting to socket");
-
-    if (client.connect(ip, port))
-    {
-        Serial.println("Connected to socket");
-    }
-    else
-    {
-        Serial.println("Failed to connect to socket");
-    }
+    Serial.print("Began listening on port ");
+    Serial.println(port);
 }
 
-void SocketManager::sendLedCount(const int count)
+void SocketManager::getNextColor()
 {
-    Serial.println("Preparing to set LED count.");
+    udp.begin(9999);
+    
+    Serial.println("Getting next color...");
 
-    String ledCountString = "LEDCOUNT=" + String(count);
-    const char *array = ledCountString.c_str();
-    client.write(array);
-
-    Serial.println("Set LED count:" + ledCountString);
-}
-
-bool test = false;
-
-std::string SocketManager::getNextCommand()
-{
-    // Serial.println("Checking for next command...");
-
-    unsigned long start = micros();
-
-    // TODO: Flush isn't working
-    // flush(): fail on fd 56, errno: 11, "No more processes"
-    // client.flush();
-
-    // We need to read in our next command; wait until command is available.
-    String message;
-    while (client.connected() && message.length() == 0)
+    while (udp.parsePacket() == 0)
     {
-        message = client.readStringUntil('\n');
+        int packetSize = udp.parsePacket();
+        if (packetSize)
+        {
+            Serial.print("Received packet! Size: ");
+            Serial.println(packetSize);
+            int len = udp.read(packet, 255);
+            if (len > 0)
+            {
+                packet[len] = '\0';
+            }
+            Serial.print("Packet received: ");
+            Serial.println(packet);
+        }
     }
+    // // Serial.println("Checking for next command...");
 
-    unsigned long end = micros();
-    Serial.print("Time: ");
-    Serial.println(end - start);
+    // unsigned long start = micros();
 
-    // Serial.println("Retrieved next command...");
+    // // TODO: Flush isn't working
+    // // flush(): fail on fd 56, errno: 11, "No more processes"
+    // // client.flush();
 
-    return message.c_str();
+    // // We need to read in our next command; wait until command is available.
+    // String message;
+    // while (client.connected() && message.length() == 0)
+    // {
+    //     message = client.readStringUntil('\n');
+    // }
+
+    // unsigned long end = micros();
+    // Serial.print("Time: ");
+    // Serial.println(end - start);
+
+    // // Serial.println("Retrieved next command...");
+
+    // return message.c_str();
 }

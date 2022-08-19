@@ -1,5 +1,6 @@
 #include "CommandParser.h"
 #include <sstream>
+#include <vector> 
 
 std::vector<uint32_t> CommandParser::parseCommand(std::string command)
 {

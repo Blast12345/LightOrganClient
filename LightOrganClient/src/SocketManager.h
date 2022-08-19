@@ -3,8 +3,9 @@
 class SocketManager
 {
 public:
-    boolean isConnected();
-    void connectToSocket(const char *ip, const int port);
-    void sendLedCount(const int count);
-    std::string getNextCommand();
+    void connectToSocket(const int port);
+    void getNextColor();
+
+private:
+    void printListeningMessage(const int port);
 };
