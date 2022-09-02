@@ -8,5 +8,5 @@ public:
 
 private:
     void printListeningMessage(const int port);
-    void getNextPackets(char *outputBuffer);
+    void getNextPacket(char *packet);
 };

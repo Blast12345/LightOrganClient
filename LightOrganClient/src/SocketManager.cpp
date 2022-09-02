@@ -19,31 +19,22 @@ void SocketManager::printListeningMessage(const int port)
 std::string SocketManager::getNextString()
 {
     Serial.println("Getting next string...");
-    char packetBuffer[255];
-    getNextPackets(packetBuffer);
-    Serial.println(packetBuffer);
+    char packet[255];
+    getNextPacket(packet);
+    Serial.println(packet);
     Serial.println("String recieved...");
-    return std::string(packetBuffer);
+    return std::string(packet);
 }
 
-void SocketManager::getNextPackets(char *outputBuffer)
+void SocketManager::getNextPacket(char *packet)
 {
-    bool thisPacketIsNotEmpty = false;
-    bool previousPacketIsLoaded = false;
+    while (true) {
+        int packetSize = udp.parsePacket();
 
-    while (true)
-    {
-        thisPacketIsNotEmpty = (udp.parsePacket() > 0);
-
-        if (thisPacketIsNotEmpty)
-        { // raise flag that a packet is loaded and read it in the buffer
-            previousPacketIsLoaded = true;
-            int bufferSize = sizeof(outputBuffer);
-            udp.read(outputBuffer, bufferSize);
-        }
-        else if (!thisPacketIsNotEmpty && previousPacketIsLoaded)
-        { // if the current packet is empty, but a loaded packet exists, break out of the loop
-            previousPacketIsLoaded = false;
+        if (packetSize)
+        {
+            int len = udp.read(packet, 255);
+            packet[len] = '\0';
             break;
         }
     }
