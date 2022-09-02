@@ -1,10 +1,8 @@
 #include "SocketManager.h"
-#include <WiFiUdp.h>
 #include <WiFi.h>
+#include <WiFiUdp.h>
 
 WiFiUDP udp;
-char packet[255];
-char reply[] = "Packet received!";
 
 void SocketManager::connectToSocket(const int port)
 {
@@ -18,48 +16,26 @@ void SocketManager::printListeningMessage(const int port)
     Serial.println(port);
 }
 
-void SocketManager::getNextColor()
+std::string SocketManager::getNextString()
 {
-    udp.begin(9999);
-    
-    Serial.println("Getting next color...");
+    Serial.println("Getting next string...");
+    char packet[255];
+    getNextPacket(packet);
+    Serial.println(packet);
+    Serial.println("String recieved...");
+    return std::string(packet);
+}
 
-    while (udp.parsePacket() == 0)
-    {
+void SocketManager::getNextPacket(char *packet)
+{
+    while (true) {
         int packetSize = udp.parsePacket();
+
         if (packetSize)
         {
-            Serial.print("Received packet! Size: ");
-            Serial.println(packetSize);
             int len = udp.read(packet, 255);
-            if (len > 0)
-            {
-                packet[len] = '\0';
-            }
-            Serial.print("Packet received: ");
-            Serial.println(packet);
+            packet[len] = '\0';
+            break;
         }
     }
-    // // Serial.println("Checking for next command...");
-
-    // unsigned long start = micros();
-
-    // // TODO: Flush isn't working
-    // // flush(): fail on fd 56, errno: 11, "No more processes"
-    // // client.flush();
-
-    // // We need to read in our next command; wait until command is available.
-    // String message;
-    // while (client.connected() && message.length() == 0)
-    // {
-    //     message = client.readStringUntil('\n');
-    // }
-
-    // unsigned long end = micros();
-    // Serial.print("Time: ");
-    // Serial.println(end - start);
-
-    // // Serial.println("Retrieved next command...");
-
-    // return message.c_str();
 }
