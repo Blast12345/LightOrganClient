@@ -1,4 +1,3 @@
-#include "Color.h"
 #include "ColorParser.h"
 #include "Configuration.h"
 #include "FastLED.h"

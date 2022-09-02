@@ -1,4 +1,3 @@
-#include "Color.h" 
 #include "ColorParser.h"
 #include <sstream>
 #include <vector>
