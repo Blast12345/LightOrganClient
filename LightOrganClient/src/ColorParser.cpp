@@ -1,9 +1,9 @@
+#include "Color.h" 
 #include "ColorParser.h"
-#include "OrganColor.h"
 #include <sstream>
 #include <vector>
 
-OrganColor ColorParser::getColor(std::string message)
+Color ColorParser::getColor(std::string message)
 {
     std::vector<uint8_t> colorChannels = getColorChannels(message);
 
@@ -35,18 +35,18 @@ std::vector<uint8_t> ColorParser::getColorChannels(std::string message)
     return colorChannels;
 }
 
-OrganColor ColorParser::getColor(std::vector<uint8_t> colorChannels)
+Color ColorParser::getColor(std::vector<uint8_t> colorChannels)
 {
-    OrganColor newColor;
+    Color newColor;
     newColor.red = colorChannels[0];
     newColor.green = colorChannels[1];
     newColor.blue = colorChannels[2];
     return newColor;
 }
 
-OrganColor ColorParser::createDefaultColor()
+Color ColorParser::createDefaultColor()
 {
-    OrganColor newColor;
+    Color newColor;
     newColor.red = 0;
     newColor.green = 0;
     newColor.blue = 0;

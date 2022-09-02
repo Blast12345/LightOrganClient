@@ -1,15 +1,15 @@
 #include <Arduino.h>
-#include "OrganColor.h"
+#include "Color.h"
 #include <vector>
 
 class ColorParser
 {
 
 public:
-    OrganColor getColor(std::string message);
+    Color getColor(std::string message);
 
 private:
     std::vector<uint8_t> getColorChannels(std::string message);
-    OrganColor getColor(std::vector<uint8_t> colorChannels);
-    OrganColor createDefaultColor();
+    Color getColor(std::vector<uint8_t> colorChannels);
+    Color createDefaultColor();
 };

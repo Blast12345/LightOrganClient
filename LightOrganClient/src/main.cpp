@@ -1,8 +1,7 @@
+#include "Color.h"
 #include "ColorParser.h"
-#include "CommandParser.h"
 #include "Configuration.h"
 #include "FastLED.h"
-#include "OrganColor.h"
 #include "SocketManager.h"
 #include "WifiManager.h"
 
@@ -55,20 +54,14 @@ void reconnectToWifiIfNeeded()
   wifiManager.connectIfNeeded(ssid, password);
 }
 
-void reconnectToSocketIfNeeded() {
+void reconnectToSocketIfNeeded()
+{
   // TODO:
   connectToSocket();
 }
 
-void setLedsForNextColor() 
-{
-  std::string colorString = socketManager.getNextString();
-  OrganColor color = colorParser.getColor(colorString);
-  setAllLedsToColor(color);
-}
-
 // TODO: Perhaps this could be moved to a LedManager?
-void setAllLedsToColor(OrganColor color)
+void setAllLedsToColor(Color color)
 {
   Serial.println("Setting pixels...");
 
@@ -78,6 +71,13 @@ void setAllLedsToColor(OrganColor color)
   }
 
   FastLED.show();
+}
+
+void setLedsForNextColor()
+{
+  std::string colorString = socketManager.getNextString();
+  Color color = colorParser.getColor(colorString);
+  setAllLedsToColor(color);
 }
 
 void loop()
