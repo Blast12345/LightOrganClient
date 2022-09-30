@@ -1,6 +1,4 @@
 #include "SocketManager.h"
-#include <WiFi.h>
-#include <WiFiUdp.h>
 
 WiFiUDP udp;
 
