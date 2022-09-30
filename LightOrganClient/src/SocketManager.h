@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <WiFiUdp.h>
 
 class SocketManager
 {

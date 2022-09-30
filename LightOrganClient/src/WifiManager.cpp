@@ -16,10 +16,16 @@ boolean WifiManager::isConnected()
 
 void WifiManager::connect(const char *ssid, const char *password)
 {
+  configureWifiConnection();
   startWifiConnection(ssid, password);
   printConnectingMessage(ssid);
   waitForWifiConnection();
   printConnectedMessage();
+}
+
+void WifiManager::configureWifiConnection()
+{
+  WiFi.setSleep(false);
 }
 
 void WifiManager::startWifiConnection(const char *ssid, const char *password)
