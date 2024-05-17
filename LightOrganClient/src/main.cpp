@@ -35,28 +35,7 @@ void connectToSocket()
 void configureNeopixels()
 {
   FastLED.addLeds<NEOPIXEL, ledPin>(leds, ledCount);
-}
-
-void setup()
-{
-
-  configureSerialOutput();
-  warmupForWifi();
-  connectToWifi();
-  connectToSocket();
-  configureNeopixels();
-}
-
-// Loop
-void reconnectToWifiIfNeeded()
-{
-  wifiManager.connectIfNeeded(ssid, password);
-}
-
-void reconnectToSocketIfNeeded()
-{
-  // TODO:
-  connectToSocket();
+  FastLED.setMaxPowerInVoltsAndMilliamps(5, 2400);
 }
 
 // TODO: Perhaps this could be moved to a LedManager?
@@ -70,6 +49,45 @@ void setAllLedsToColor(Color color)
   }
 
   FastLED.show();
+}
+
+void loopThroughColorWheel()
+{
+  for (int colorStep = 0; colorStep < 256; colorStep++)
+  {
+    Color color;
+    color.red = sin(colorStep * 0.024) * 127 + 128;
+    color.green = sin(colorStep * 0.024 + 2 * PI / 3) * 127 + 128;
+    color.blue = sin(colorStep * 0.024 + 4 * PI / 3) * 127 + 128;
+
+    setAllLedsToColor(color);
+
+    delay(10); // delay for visual effect, adjust as needed
+  }
+
+  loopThroughColorWheel();
+}
+
+void setup()
+{
+  // configureSerialOutput();
+  // warmupForWifi();
+  // connectToWifi();
+  // connectToSocket();
+  configureNeopixels();
+  loopThroughColorWheel();
+}
+
+// Loop
+void reconnectToWifiIfNeeded()
+{
+  wifiManager.connectIfNeeded(ssid, password);
+}
+
+void reconnectToSocketIfNeeded()
+{
+  // TODO:
+  connectToSocket();
 }
 
 void setLedsForNextColor()
