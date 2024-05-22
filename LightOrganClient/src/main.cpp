@@ -3,12 +3,14 @@
 #include "FastLED.h"
 #include "SocketManager.h"
 #include "WifiManager.h"
+#include "Leds.h"
 
 // State
+Leds leds;
 WifiManager wifiManager;
 SocketManager socketManager;
 ColorParser colorParser;
-CRGB leds[ledCount];
+bool isNewConnection = true;
 
 // Setup
 void configureSerialOutput()
@@ -16,42 +18,27 @@ void configureSerialOutput()
   Serial.begin(115200);
 }
 
-void warmupForWifi()
+void warmUpWifi()
 {
   // NOTE: Connecting to wifi immediately resulted in messages not being received.
-  delay(10);
+  uint32_t tenMs = 10;
+  delay(tenMs);
 }
 
+void setup()
+{
+  configureSerialOutput();
+  leds.setup();
+  warmUpWifi();
+}
+
+// Loop
 void connectToWifi()
 {
   wifiManager.connect(ssid, password);
 }
 
-void connectToSocket()
-{
-  socketManager.connectToSocket(port);
-}
-
-void configureNeopixels()
-{
-  FastLED.addLeds<NEOPIXEL, ledPin>(leds, ledCount);
-  FastLED.setMaxPowerInVoltsAndMilliamps(5, 2400);
-}
-
-// TODO: Perhaps this could be moved to a LedManager?
-void setAllLedsToColor(Color color)
-{
-  Serial.println("Setting pixels...");
-
-  for (uint i = 0; i < ledCount; i++)
-  {
-    leds[i].setRGB(color.red, color.green, color.blue);
-  }
-
-  FastLED.show();
-}
-
-void loopThroughColorWheel()
+void updateLedsUsingFallback()
 {
   for (int colorStep = 0; colorStep < 256; colorStep++)
   {
@@ -60,46 +47,38 @@ void loopThroughColorWheel()
     color.green = sin(colorStep * 0.024 + 2 * PI / 3) * 127 + 128;
     color.blue = sin(colorStep * 0.024 + 4 * PI / 3) * 127 + 128;
 
-    setAllLedsToColor(color);
+    leds.setAllTo(color);
 
     delay(10); // delay for visual effect, adjust as needed
   }
-
-  loopThroughColorWheel();
 }
 
-void setup()
+void handleInitialConnectionIfNeeded()
 {
-  // configureSerialOutput();
-  // warmupForWifi();
-  // connectToWifi();
-  // connectToSocket();
-  configureNeopixels();
-  loopThroughColorWheel();
+  wifiManager.printConnectionInformation();
+  socketManager.openPort(port);
+  // TODO: new connection false?
 }
 
-// Loop
-void reconnectToWifiIfNeeded()
-{
-  wifiManager.connectIfNeeded(ssid, password);
-}
-
-void reconnectToSocketIfNeeded()
-{
-  // TODO:
-  connectToSocket();
-}
-
-void setLedsForNextColor()
+void setLedsToNextColor()
 {
   std::string colorString = socketManager.getNextString();
   Color color = colorParser.getColor(colorString);
-  setAllLedsToColor(color);
+  leds.setAllTo(color);
 }
 
 void loop()
 {
-  reconnectToWifiIfNeeded();
-  reconnectToSocketIfNeeded();
-  setLedsForNextColor();
+  if (wifiManager.isDisconnected())
+  {
+    connectToWifi();
+    updateLedsUsingFallback();
+    isNewConnection = true;
+  }
+  else if (wifiManager.isConnected())
+  {
+    handleInitialConnectionIfNeeded();
+    setLedsToNextColor();
+    isNewConnection = false;
+  }
 }

@@ -2,16 +2,10 @@
 
 WiFiUDP udp;
 
-void SocketManager::connectToSocket(const int port)
+void SocketManager::openPort(const int port)
 {
     udp.begin(port);
-    printListeningMessage(port);
-}
-
-void SocketManager::printListeningMessage(const int port)
-{
-    Serial.print("Began listening on port ");
-    Serial.println(port);
+    Serial.println("Began listening on port: " + port);
 }
 
 std::string SocketManager::getNextString()
@@ -26,7 +20,8 @@ std::string SocketManager::getNextString()
 
 void SocketManager::getNextPacket(char *packet)
 {
-    while (true) {
+    while (true)
+    {
         int packetSize = udp.parsePacket();
 
         if (packetSize)

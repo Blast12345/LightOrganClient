@@ -2,6 +2,8 @@
 #include "Color.h"
 #include <vector>
 
+#pragma once
+
 class ColorParser
 {
 

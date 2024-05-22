@@ -1,68 +1,50 @@
 #include "WifiManager.h"
 
-void WifiManager::connectIfNeeded(const char *ssid, const char *password)
-{
-  if (isConnected() == false)
-  {
-    connect(ssid, password);
-    return;
-  }
-}
-
 boolean WifiManager::isConnected()
 {
-  return WiFi.isConnected();
+  return WiFi.isConnected() == true;
+}
+
+boolean WifiManager::isDisconnected()
+{
+  return WiFi.isConnected() == false;
 }
 
 void WifiManager::connect(const char *ssid, const char *password)
 {
-  configureWifiConnection();
-  startWifiConnection(ssid, password);
-  printConnectingMessage(ssid);
-  waitForWifiConnection();
-  printConnectedMessage();
+  wakeWifiHardware();
+  attemptToConnect(ssid, password);
+  printConnectionInformation();
 }
 
-void WifiManager::configureWifiConnection()
+void WifiManager::wakeWifiHardware()
 {
   WiFi.setSleep(false);
 }
 
-void WifiManager::startWifiConnection(const char *ssid, const char *password)
+void WifiManager::attemptToConnect(const char *ssid, const char *password)
 {
   WiFi.begin(ssid, password);
 }
 
-void WifiManager::printConnectingMessage(const char *ssid)
+void WifiManager::printConnectionInformation()
 {
-  Serial.print("Connecting to ");
-  Serial.print(ssid);
-  Serial.println("...");
+  printSSID();
+  printSignalStrength();
+  printIpAddress();
 }
 
-void WifiManager::waitForWifiConnection()
+void WifiManager::printSSID()
 {
-  int timeAwaited = 0;
-
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(1000);
-    printTimeAwaited(timeAwaited);
-    timeAwaited++;
-  }
-
-  Serial.println('\n');
+  Serial.println("SSID: " + WiFi.SSID());
 }
 
-void WifiManager::printTimeAwaited(int timeAwaited)
+void WifiManager::printSignalStrength()
 {
-  Serial.print(timeAwaited);
-  Serial.print(' ');
+  Serial.println("Signal strength: " + String(WiFi.RSSI()) + " dBm");
 }
 
-void WifiManager::printConnectedMessage()
+void WifiManager::printIpAddress()
 {
-  Serial.println("Connection established!");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP()); // Send the IP address of the ESP8266 to the computer
+  Serial.println("IP address: " + WiFi.localIP().toString());
 }
