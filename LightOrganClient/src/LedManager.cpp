@@ -1,16 +1,16 @@
-#include "Leds.h"
-#include "FastLED.h"
 #include "Configuration.h"
+#include "LedManager.h"
+#include "FastLED.h"
 
 CRGB leds[ledCount];
 
-void Leds::setup()
+void LedManager::setup()
 {
     FastLED.addLeds<NEOPIXEL, ledPin>(leds, ledCount);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, 2400);
 }
 
-void Leds::setAllTo(Color color)
+void LedManager::setAllTo(Color color)
 {
     Serial.println("Setting pixels...");
 

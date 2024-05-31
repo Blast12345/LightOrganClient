@@ -2,7 +2,7 @@
 
 #pragma once
 
-class Leds
+class LedManager
 {
 public:
     void setup();

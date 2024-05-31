@@ -3,10 +3,10 @@
 #include "FastLED.h"
 #include "SocketManager.h"
 #include "WifiManager.h"
-#include "Leds.h"
+#include "LedManager.h"
 
 // State
-Leds leds;
+LedManager ledManager;
 WifiManager wifiManager;
 SocketManager socketManager;
 ColorParser colorParser;
@@ -28,7 +28,7 @@ void warmUpWifi()
 void setup()
 {
   configureSerialOutput();
-  leds.setup();
+  ledManager.setup();
   warmUpWifi();
 }
 
@@ -47,7 +47,7 @@ void updateLedsUsingFallback()
     color.green = sin(colorStep * 0.024 + 2 * PI / 3) * 127 + 128;
     color.blue = sin(colorStep * 0.024 + 4 * PI / 3) * 127 + 128;
 
-    leds.setAllTo(color);
+    ledManager.setAllTo(color);
 
     delay(10); // delay for visual effect, adjust as needed
   }
@@ -64,7 +64,7 @@ void setLedsToNextColor()
 {
   std::string colorString = socketManager.getNextString();
   Color color = colorParser.getColor(colorString);
-  leds.setAllTo(color);
+  ledManager.setAllTo(color);
 }
 
 void loop()
