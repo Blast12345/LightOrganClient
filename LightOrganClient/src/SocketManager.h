@@ -10,5 +10,5 @@ public:
     std::string getNextString();
 
 private:
-    void getNextPacket(char *packet);
+    bool getNextPacket(char *packet);
 };

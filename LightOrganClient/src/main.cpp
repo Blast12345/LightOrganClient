@@ -38,26 +38,14 @@ void connectToWifi()
   wifiManager.connect(ssid, password);
 }
 
-void updateLedsUsingFallback()
-{
-  for (int colorStep = 0; colorStep < 256; colorStep++)
-  {
-    Color color;
-    color.red = sin(colorStep * 0.024) * 127 + 128;
-    color.green = sin(colorStep * 0.024 + 2 * PI / 3) * 127 + 128;
-    color.blue = sin(colorStep * 0.024 + 4 * PI / 3) * 127 + 128;
-
-    ledManager.setAllTo(color);
-
-    delay(10); // delay for visual effect, adjust as needed
-  }
-}
-
 void handleInitialConnectionIfNeeded()
 {
-  wifiManager.printConnectionInformation();
-  socketManager.openPort(port);
-  // TODO: new connection false?
+  if (isNewConnection)
+  {
+    // wifiManager.printConnectionInformation();
+    socketManager.openPort(port);
+    // isNewConnection = false;
+  }
 }
 
 void setLedsToNextColor()
@@ -69,16 +57,26 @@ void setLedsToNextColor()
 
 void loop()
 {
+  wifiManager.printConnectionInformation();
+
   if (wifiManager.isDisconnected())
   {
-    connectToWifi();
-    updateLedsUsingFallback();
     isNewConnection = true;
+    connectToWifi();
+
+    while (wifiManager.isDisconnected())
+    {
+      Serial.println("Waiting for connection...");
+      delay(1);
+    }
   }
+  // else if (!wifiManager.isReliableConnection())
+  // {
+  //   // ledManager.useFallbackLoop();
+  // }
   else if (wifiManager.isConnected())
   {
     handleInitialConnectionIfNeeded();
-    setLedsToNextColor();
-    isNewConnection = false;
+    // setLedsToNextColor();
   }
 }

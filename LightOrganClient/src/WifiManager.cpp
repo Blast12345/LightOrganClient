@@ -10,6 +10,11 @@ boolean WifiManager::isDisconnected()
   return WiFi.isConnected() == false;
 }
 
+boolean WifiManager::isReliableConnection()
+{
+  return WiFi.RSSI() > -80 && WiFi.localIP().toString() != "0.0.0.0";
+}
+
 void WifiManager::connect(const char *ssid, const char *password)
 {
   wakeWifiHardware();

@@ -10,6 +10,7 @@ public:
     boolean isDisconnected();
     void connect(const char *ssid, const char *password);
     void printConnectionInformation();
+    boolean isReliableConnection();
 
 private:
     void wakeWifiHardware();
