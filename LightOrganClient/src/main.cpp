@@ -27,6 +27,7 @@ void warmUpWifi()
 
 void setup()
 {
+  // Test
   configureSerialOutput();
   ledManager.setup();
   warmUpWifi();
