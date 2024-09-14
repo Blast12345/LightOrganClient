@@ -15,7 +15,4 @@ public:
 private:
     void wakeWifiHardware();
     void attemptToConnect(const char *ssid, const char *password);
-    void printSSID();
-    void printSignalStrength();
-    void printIpAddress();
 };

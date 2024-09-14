@@ -18,8 +18,12 @@ boolean WifiManager::isReliableConnection()
 void WifiManager::connect(const char *ssid, const char *password)
 {
   wakeWifiHardware();
-  attemptToConnect(ssid, password);
-  printConnectionInformation();
+
+  while (isDisconnected())
+  {
+    Serial.println("Attempting to connect to WiFi...");
+    attemptToConnect(ssid, password);
+  }
 }
 
 void WifiManager::wakeWifiHardware()
@@ -30,26 +34,18 @@ void WifiManager::wakeWifiHardware()
 void WifiManager::attemptToConnect(const char *ssid, const char *password)
 {
   WiFi.begin(ssid, password);
+  delay(100);
+
+  if (isConnected())
+  {
+    printConnectionInformation();
+  }
 }
 
 void WifiManager::printConnectionInformation()
 {
-  printSSID();
-  printSignalStrength();
-  printIpAddress();
-}
-
-void WifiManager::printSSID()
-{
+  Serial.println("Connection established.");
   Serial.println("SSID: " + WiFi.SSID());
-}
-
-void WifiManager::printSignalStrength()
-{
   Serial.println("Signal strength: " + String(WiFi.RSSI()) + " dBm");
-}
-
-void WifiManager::printIpAddress()
-{
   Serial.println("IP address: " + WiFi.localIP().toString());
 }

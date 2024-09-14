@@ -12,38 +12,20 @@ SocketManager socketManager;
 ColorParser colorParser;
 bool isNewConnection = true;
 
-// Setup
-void configureSerialOutput()
-{
-  Serial.begin(115200);
-}
-
-void warmUpWifi()
-{
-  // NOTE: Connecting to wifi immediately resulted in messages not being received.
-  uint32_t tenMs = 10;
-  delay(tenMs);
-}
-
 void setup()
 {
-  // Test
-  configureSerialOutput();
+  delay(1000); // Give the device some time to warm up or weird things tend to happen.
+  Serial.begin(buadRate);
+  Serial.println("Buad rate set.");
   ledManager.setup();
-  warmUpWifi();
+  Serial.println("Setup complete.");
 }
 
 // Loop
-void connectToWifi()
-{
-  wifiManager.connect(ssid, password);
-}
-
 void handleInitialConnectionIfNeeded()
 {
   if (isNewConnection)
   {
-    // wifiManager.printConnectionInformation();
     socketManager.openPort(port);
     // isNewConnection = false;
   }
@@ -58,26 +40,14 @@ void setLedsToNextColor()
 
 void loop()
 {
-  wifiManager.printConnectionInformation();
-
   if (wifiManager.isDisconnected())
   {
-    isNewConnection = true;
-    connectToWifi();
-
-    while (wifiManager.isDisconnected())
-    {
-      Serial.println("Waiting for connection...");
-      delay(1);
-    }
+    //   isNewConnection = true;
+    wifiManager.connect(ssid, password);
   }
-  // else if (!wifiManager.isReliableConnection())
-  // {
-  //   // ledManager.useFallbackLoop();
-  // }
   else if (wifiManager.isConnected())
   {
-    handleInitialConnectionIfNeeded();
+    // handleInitialConnectionIfNeeded();
     // setLedsToNextColor();
   }
 }

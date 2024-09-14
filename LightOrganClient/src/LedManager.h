@@ -7,7 +7,6 @@ class LedManager
 public:
     void setup();
     void setAllTo(Color color);
-    void useFallbackLoop();
 
 private:
 };
