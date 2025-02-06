@@ -4,9 +4,8 @@
 #include <ESPmDNS.h>
 
 WiFiClient client;
-IPAddress serverIP(192, 168, 1, 101); // Predefined server IP address
 
-void connectToServer(IPAddress serverIP, uint16_t serverPort)
+void connectToServer(IPAddress serverIP, int serverPort)
 {
     Serial.print("Connecting to server at ");
     Serial.print(serverIP);
@@ -33,7 +32,7 @@ void connectToServer(IPAddress serverIP, uint16_t serverPort)
     Serial.println("All connection attempts failed.");
 }
 
-void SocketManager::openPort(const int port)
+void SocketManager::openPort(IPAddress serverIP, int serverPort)
 {
     if (client.connected())
     {
@@ -41,14 +40,14 @@ void SocketManager::openPort(const int port)
         return;
     }
 
-    if (!MDNS.begin("esp32"))
-    { // The name of the device (you can use any name)
-        Serial.println("Error starting mDNS");
-        return;
-    }
-    Serial.println("mDNS responder started");
+    // if (!MDNS.begin("esp32"))
+    // { // The name of the device (you can use any name)
+    //     Serial.println("Error starting mDNS");
+    //     return;
+    // }
+    // Serial.println("mDNS responder started");
 
-    connectToServer(serverIP, port);
+    connectToServer(serverIP, serverPort);
 }
 
 bool SocketManager::getNextPacket(char *packet)

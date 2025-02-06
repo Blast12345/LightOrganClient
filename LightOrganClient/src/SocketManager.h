@@ -6,7 +6,7 @@
 class SocketManager
 {
 public:
-    void openPort(const int port);
+    void openPort(IPAddress serverIP, int serverPort);
     std::string getNextString();
 
 private:

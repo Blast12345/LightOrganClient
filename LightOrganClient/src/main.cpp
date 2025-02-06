@@ -2,52 +2,39 @@
 #include "Configuration.h"
 #include "FastLED.h"
 #include "SocketManager.h"
-#include "WifiManager.h"
 #include "LedManager.h"
 
-// State
-LedManager ledManager;
-WifiManager wifiManager;
-SocketManager socketManager;
-ColorParser colorParser;
-bool isNewConnection = true;
+LedManager ledManager; // TODO: Better name?
 
 void setup()
 {
   delay(1000); // Give the device some time to warm up or weird things tend to happen.
-  Serial.begin(buadRate);
-  Serial.println("Buad rate set.");
+
+  Serial.begin(baudRate);
+  Serial.println("Baud rate set to: " + String(baudRate));
+
   ledManager.setup();
+
   Serial.println("Setup complete.");
 }
 
-// Loop
-void handleInitialConnectionIfNeeded()
-{
-  if (isNewConnection)
-  {
-    socketManager.openPort(port);
-    // isNewConnection = false;
-  }
-}
-
-void setLedsToNextColor()
-{
-  std::string colorString = socketManager.getNextString();
-  Color color = colorParser.getColor(colorString);
-  ledManager.setAllTo(color);
-}
-
+// TODO: State machine?
 void loop()
 {
-  if (wifiManager.isDisconnected())
+  if (network.isDisconnected())
   {
-    //   isNewConnection = true;
-    wifiManager.connect(ssid, password);
+    network.connect();
+    server.reset();
   }
-  else if (wifiManager.isConnected())
+
+  if (network.isConnected() && server.isDisconnected())
   {
-    // handleInitialConnectionIfNeeded();
-    // setLedsToNextColor();
+    server.connect();
+  }
+
+  if (network.isConnected() && server.isConnected())
+  {
+    Color nextColor = server.getNextColor();
+    ledManager.setAllTo(nextColor);
   }
 }

@@ -49,6 +49,9 @@
         "random": "cpp",
         "string_view": "cpp",
         "system_error": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "thread": "cpp"
     }
 }
