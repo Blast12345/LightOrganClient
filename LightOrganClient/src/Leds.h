@@ -1,8 +1,8 @@
+#pragma once
+
 #include "Color.h"
 #include "Configuration.h"
 #include <FastLED.h>
-
-#pragma once
 
 class Leds
 {
