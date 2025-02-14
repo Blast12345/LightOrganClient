@@ -1,87 +1,43 @@
-#include "ColorParser.h"
 #include "Configuration.h"
-#include "FastLED.h"
-#include "SocketManager.h"
-#include "WifiManager.h"
+#include "Leds.h"
 
-// State
-WifiManager wifiManager;
-SocketManager socketManager;
-ColorParser colorParser;
-CRGB leds[ledCount];
-
-// Setup
-void configureSerialOutput()
-{
-  Serial.begin(115200);
-}
-
-void warmupForWifi()
-{
-  // NOTE: Connecting to wifi immediately resulted in messages not being received.
-  delay(10);
-}
-
-void connectToWifi()
-{
-  wifiManager.connect(ssid, password);
-}
-
-void connectToSocket()
-{
-  socketManager.connectToSocket(port);
-}
-
-void configureNeopixels()
-{
-  FastLED.addLeds<NEOPIXEL, ledPin>(leds, ledCount);
-}
+Leds leds;
 
 void setup()
 {
+  delay(1000); // Give the device some time to warm up or weird things tend to happen.
 
-  configureSerialOutput();
-  warmupForWifi();
-  connectToWifi();
-  connectToSocket();
-  configureNeopixels();
-}
+  Serial.begin(baudRate);
+  Serial.println("Baud rate set to: " + String(baudRate));
 
-// Loop
-void reconnectToWifiIfNeeded()
-{
-  wifiManager.connectIfNeeded(ssid, password);
-}
+  leds.setup();
 
-void reconnectToSocketIfNeeded()
-{
-  // TODO:
-  connectToSocket();
-}
-
-// TODO: Perhaps this could be moved to a LedManager?
-void setAllLedsToColor(Color color)
-{
-  Serial.println("Setting pixels...");
-
-  for (uint i = 0; i < ledCount; i++)
-  {
-    leds[i].setRGB(color.red, color.green, color.blue);
-  }
-
-  FastLED.show();
-}
-
-void setLedsForNextColor()
-{
-  std::string colorString = socketManager.getNextString();
-  Color color = colorParser.getColor(colorString);
-  setAllLedsToColor(color);
+  Serial.println("Setup complete.");
 }
 
 void loop()
 {
-  reconnectToWifiIfNeeded();
-  reconnectToSocketIfNeeded();
-  setLedsForNextColor();
+  if (network.isDisconnected())
+  {
+    network.connect();
+  }
+
+  if (network.isConnected() && server.isNotListening())
+  {
+    try
+    {
+      server.beginListening();
+    }
+    catch (const std::runtime_error &e)
+    {
+      Serial.println("Error: " + String(e.what()));
+      delay(1000);
+    }
+  }
+
+  if (network.isConnected() && server.isListening())
+  {
+    server.onNextColor([](Color color)
+                       { leds.setAllTo(color); });
+  }
 }
