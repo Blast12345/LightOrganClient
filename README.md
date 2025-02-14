@@ -10,5 +10,4 @@ The exact configuration of the client may vary from user to user (e.g. different
 
 Non-sensitive configuration occurs in `Configuration.h`. The file is prefilled with values that work for my boards (and hopefully yours too), but you can update it as needed.
 
-Sensitive configuration such as WiFi credentials occcurs in a file that you must create: `Secrets.h`
-Please refer to `SecretsTemplate.h` for an example of how to implement.
+Sensitive configuration (such as WiFi credentials) shall be placed in a file that you must create called `Secrets.h`. Please refer to `SecretsTemplate.h` for an example of how to implement.
