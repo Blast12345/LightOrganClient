@@ -4,6 +4,10 @@ The client's sole job is to display the colors that are broadcasted by the serve
 
 ![Overview](overview.png)
 
+## Hardware
+
+TBD
+
 ## Configuration
 
 The exact configuration of the client may vary from user to user (e.g. different networks, different ESP32 modules).
