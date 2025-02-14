@@ -1,10 +1,7 @@
-#include "ColorParser.h"
 #include "Configuration.h"
-#include "FastLED.h"
-#include "SocketManager.h"
-#include "LedManager.h"
+#include "Leds.h"
 
-LedManager ledManager; // TODO: Better name?
+Leds leds;
 
 void setup()
 {
@@ -13,28 +10,34 @@ void setup()
   Serial.begin(baudRate);
   Serial.println("Baud rate set to: " + String(baudRate));
 
-  ledManager.setup();
+  leds.setup();
 
   Serial.println("Setup complete.");
 }
 
-// TODO: State machine?
 void loop()
 {
   if (network.isDisconnected())
   {
     network.connect();
-    server.reset();
   }
 
-  if (network.isConnected() && server.isDisconnected())
+  if (network.isConnected() && server.isNotListening())
   {
-    server.connect();
+    try
+    {
+      server.beginListening();
+    }
+    catch (const std::runtime_error &e)
+    {
+      Serial.println("Error: " + String(e.what()));
+      delay(1000);
+    }
   }
 
-  if (network.isConnected() && server.isConnected())
+  if (network.isConnected() && server.isListening())
   {
-    Color nextColor = server.getNextColor();
-    ledManager.setAllTo(nextColor);
+    server.onNextColor([](Color color)
+                       { leds.setAllTo(color); });
   }
 }

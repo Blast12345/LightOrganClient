@@ -1,8 +1,10 @@
 #include "Color.h"
+#include "Configuration.h"
+#include <FastLED.h>
 
 #pragma once
 
-class LedManager
+class Leds
 {
 private:
     CRGB leds[ledCount];

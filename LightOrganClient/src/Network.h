@@ -13,8 +13,8 @@ public:
 
         while (isDisconnected())
         {
-            // delay(1000);
             attemptToConnect(ssid, password);
+            delay(1000);
         }
     }
 
@@ -41,10 +41,10 @@ private:
     {
         Serial.println("Attempting to connect to WiFi...");
         WiFi.begin(ssid, password);
-        delay(1000);
 
         if (isConnected())
         {
+            delay(1000); // Give the device time to be assigned an IP and whatnot.
             printConnectionInformation();
         }
     }
