@@ -1,10 +1,10 @@
-## Client Overview
+# Client Overview
 
 The client's sole job is to display the colors that are broadcasted by the server. It accomplishes this by connecting to the appropriate network, creating a listener for the packets, parsing packets as they become available, and outputting the colors to the connected LEDs.
 
 ![Overview](overview.png)
 
-# Configuration
+## Configuration
 
 The exact configuration of the client may vary from user to user (e.g. different networks, different ESP32 modules).
 
