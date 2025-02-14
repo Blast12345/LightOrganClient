@@ -1,7 +1,6 @@
 #include "Configuration.h"
+#include "Secrets.h"
 
-char *networkSSID = "DasHouse";
-char *networkPassword = "DyehtsoDPtW?Itn.Inastjwty.";
 Network network(networkSSID, networkPassword);
 
 // Server
