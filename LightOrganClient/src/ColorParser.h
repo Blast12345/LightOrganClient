@@ -9,7 +9,7 @@ class ColorParser
 {
 
 public:
-    Color getColor(std::string message)
+    Color getColor(const std::string &message)
     {
         std::vector<uint8_t> colorChannels = getColorChannels(message);
 
@@ -42,7 +42,7 @@ private:
         return colorChannels;
     }
 
-    Color getColor(std::vector<uint8_t> colorChannels)
+    Color getColor(const std::vector<uint8_t> &colorChannels)
     {
         Color newColor;
         newColor.red = colorChannels[0];

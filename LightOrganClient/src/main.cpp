@@ -15,6 +15,7 @@ void setup()
   Serial.println("Setup complete.");
 }
 
+// cppcheck-suppress unusedFunction ; This function is called by the Arduino framework.
 void loop()
 {
   if (network.isDisconnected())

@@ -52,6 +52,16 @@
         "iomanip": "cpp",
         "chrono": "cpp",
         "ratio": "cpp",
-        "thread": "cpp"
-    }
+        "thread": "cpp",
+        "bitset": "cpp",
+        "condition_variable": "cpp",
+        "csignal": "cpp",
+        "set": "cpp",
+        "mutex": "cpp"
+    },
+    "c-cpp-flylint.clang.enable": false,
+    "c-cpp-flylint.flexelint.enable": false,
+    "c-cpp-flylint.flawfinder.enable": false,
+    "c-cpp-flylint.lizard.enable": false,
+    "c-cpp-flylint.excludeFromWorkspacePaths": []
 }
