@@ -28,6 +28,14 @@ public:
         return WiFi.isConnected() == false;
     }
 
+    void printConnectionInformation()
+    {
+        Serial.println("Connection established.");
+        Serial.println("SSID: " + WiFi.SSID());
+        Serial.println("Signal strength: " + String(WiFi.RSSI()) + " dBm");
+        Serial.println("IP address: " + WiFi.localIP().toString());
+    }
+
 private:
     const char *const ssid;
     const char *const password;
@@ -39,21 +47,13 @@ private:
 
     void attemptToConnect(const char *ssid, const char *password)
     {
-        Serial.println("Attempting to connect to WiFi...");
+        Serial.print("Attempting to connect to WiFi...");
         WiFi.begin(ssid, password);
 
-        if (isConnected())
+        while (isDisconnected())
         {
-            delay(1000); // Give the device time to be assigned an IP and whatnot.
-            printConnectionInformation();
+            Serial.println(".");
+            delay(1000);
         }
-    }
-
-    void printConnectionInformation()
-    {
-        Serial.println("Connection established.");
-        Serial.println("SSID: " + WiFi.SSID());
-        Serial.println("Signal strength: " + String(WiFi.RSSI()) + " dBm");
-        Serial.println("IP address: " + WiFi.localIP().toString());
     }
 };

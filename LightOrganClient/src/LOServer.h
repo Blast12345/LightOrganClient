@@ -14,7 +14,7 @@ private:
     std::function<void(Color)> nextColorCallback;
 
 public:
-    explicit LOServer(int port) : port(port) {}
+    explicit LOServer(int port) : port(port), udp(), colorParser() {}
 
     void beginListening()
     {

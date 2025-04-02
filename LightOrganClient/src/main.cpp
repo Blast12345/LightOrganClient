@@ -1,13 +1,20 @@
 #include "Configuration.h"
 #include "Leds.h"
+#include "Secrets.h"
+#include "Network.h"
+#include "LOServer.h"
 
+// NOLINTBEGIN(cppcoreguidelines-avoid-non-const-global-variables)
 Leds leds;
+Network network(networkSSID, networkPassword);
+LOServer server(serverPort);
+// NOLINTEND(cppcoreguidelines-avoid-non-const-global-variables)
 
 void setup()
 {
+  Serial.begin(baudRate);
   delay(1000); // Give the device some time to warm up or weird things tend to happen.
 
-  Serial.begin(baudRate);
   Serial.println("Baud rate set to: " + String(baudRate));
 
   leds.setup();
@@ -21,6 +28,8 @@ void loop()
   if (network.isDisconnected())
   {
     network.connect();
+    delay(1000); // Give the device time to be assigned an IP and whatnot.
+    network.printConnectionInformation();
   }
 
   if (network.isConnected() && server.isNotListening())

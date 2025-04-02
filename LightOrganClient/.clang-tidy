@@ -1,0 +1,10 @@
+Checks: >
+  bugprone-*, 
+  clang-analyzer-*, 
+  cppcoreguidelines-*, 
+  modernize-*, 
+  performance-*, 
+  portability-*,
+  readability-*
+
+ExtraArgs: ['-std=gnu++17']

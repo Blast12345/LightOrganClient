@@ -12,6 +12,7 @@ private:
 public:
     void setup()
     {
+
         FastLED.addLeds<NEOPIXEL, ledPin>(leds, ledCount);
         FastLED.clear(true);
         FastLED.setMaxPowerInVoltsAndMilliamps(5, 14000);

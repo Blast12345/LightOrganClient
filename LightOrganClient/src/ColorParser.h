@@ -7,9 +7,8 @@
 
 class ColorParser
 {
-
 public:
-    Color getColor(const std::string &message)
+    static auto getColor(std::string message) -> Color
     {
         std::vector<uint8_t> colorChannels = getColorChannels(message);
 
@@ -19,12 +18,12 @@ public:
         }
         else
         {
-            return createDefaultColor();
+            return Color(0, 0, 0); // TODO: Name black
         }
     }
 
 private:
-    std::vector<uint8_t> getColorChannels(std::string message)
+    static auto getColorChannels(std::string message) -> std::vector<uint8_t>
     {
         std::vector<uint8_t> colorChannels;
         std::stringstream s_stream(message);
@@ -42,21 +41,8 @@ private:
         return colorChannels;
     }
 
-    Color getColor(const std::vector<uint8_t> &colorChannels)
+    static auto getColor(std::vector<uint8_t> colorChannels) -> Color
     {
-        Color newColor;
-        newColor.red = colorChannels[0];
-        newColor.green = colorChannels[1];
-        newColor.blue = colorChannels[2];
-        return newColor;
-    }
-
-    Color createDefaultColor()
-    {
-        Color newColor;
-        newColor.red = 0;
-        newColor.green = 0;
-        newColor.blue = 0;
-        return newColor;
+        return Color(colorChannels[0], colorChannels[1], colorChannels[2]);
     }
 };

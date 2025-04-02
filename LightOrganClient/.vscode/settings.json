@@ -59,9 +59,11 @@
         "set": "cpp",
         "mutex": "cpp"
     },
-    "c-cpp-flylint.clang.enable": false,
-    "c-cpp-flylint.flexelint.enable": false,
-    "c-cpp-flylint.flawfinder.enable": false,
-    "c-cpp-flylint.lizard.enable": false,
-    "c-cpp-flylint.excludeFromWorkspacePaths": []
+    "triggerTaskOnSave.restart": true,
+    "triggerTaskOnSave.selectedTask": "pio-check",
+    "triggerTaskOnSave.tasks": {
+        "build": [
+            "*.{cpp,h}",
+        ],
+    },
 }
