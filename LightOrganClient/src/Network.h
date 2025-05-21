@@ -1,11 +1,13 @@
 #pragma once
 
 #include <WiFi.h>
+#include "NetworkCredentials.h"
+#include "helpers/Wait.h"
 
 class Network
 {
 public:
-    Network(const char *ssid, const char *password) : ssid(ssid), password(password) {}
+    Network(const NetworkCredentials &credentials) : credentials(credentials) {}
 
     void connect()
     {
@@ -13,22 +15,22 @@ public:
 
         while (isDisconnected())
         {
-            attemptToConnect(ssid, password);
-            delay(1000);
+            attemptToConnect();
+            waitOneSecond();
         }
     }
 
-    boolean isConnected()
+    auto isConnected() -> boolean
     {
         return WiFi.isConnected() == true;
     }
 
-    boolean isDisconnected()
+    auto isDisconnected() -> boolean
     {
         return WiFi.isConnected() == false;
     }
 
-    void printConnectionInformation()
+    auto printConnectionInformation() -> void
     {
         Serial.println("Connection established.");
         Serial.println("SSID: " + WiFi.SSID());
@@ -37,23 +39,22 @@ public:
     }
 
 private:
-    const char *const ssid;
-    const char *const password;
+    const NetworkCredentials &credentials;
 
     void wakeWifiHardware()
     {
         WiFi.setSleep(false);
     }
 
-    void attemptToConnect(const char *ssid, const char *password)
+    void attemptToConnect()
     {
         Serial.print("Attempting to connect to WiFi...");
-        WiFi.begin(ssid, password);
+        WiFi.begin(credentials.ssid, credentials.password);
 
         while (isDisconnected())
         {
             Serial.println(".");
-            delay(1000);
+            waitOneSecond();
         }
     }
 };

@@ -60,7 +60,7 @@
         "mutex": "cpp"
     },
     "triggerTaskOnSave.restart": true,
-    "triggerTaskOnSave.selectedTask": "pio-check",
+    "triggerTaskOnSave.selectedTask": "Run Linters",
     "triggerTaskOnSave.tasks": {
         "build": [
             "*.{cpp,h}",

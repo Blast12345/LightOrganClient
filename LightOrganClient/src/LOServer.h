@@ -23,12 +23,12 @@ public:
         startHandlingPackets();
     }
 
-    bool isListening()
+    auto isListening() const -> bool
     {
         return listening;
     }
 
-    bool isNotListening()
+    auto isNotListening() const -> bool
     {
         return !listening;
     }
