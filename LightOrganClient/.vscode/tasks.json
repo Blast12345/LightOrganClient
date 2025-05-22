@@ -11,9 +11,6 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
-            "presentation": {
-                "reveal": "silent"
             }
         },
         {
@@ -66,7 +63,10 @@
                     "message": 5,
                     "code": 6
                 }
-            }
+            },
+            "presentation": {
+                "reveal": "silent"
+            },
         }
     ]
 }

@@ -11,14 +11,14 @@ private:
     std::vector<CRGB> leds;
 
 public:
-    explicit LedSegment(uint16_t count) : leds(count, CRGB::Black) {}
+    explicit LedSegment(unsigned int count) : leds(count, CRGB::Black) {}
 
     auto getLeds() -> CRGB *
     {
         return leds.data();
     }
 
-    auto size() const -> uint16_t
+    auto size() const -> unsigned int
     {
         return leds.size();
     }

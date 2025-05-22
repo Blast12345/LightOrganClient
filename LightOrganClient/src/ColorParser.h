@@ -2,15 +2,16 @@
 
 #include <Arduino.h>
 #include "Color.h"
+#include "Colors.h"
 #include <sstream>
 #include <vector>
 
 class ColorParser
 {
 public:
-    static auto getColor(std::string message) -> Color
+    static auto getColor(const std::string &message) -> Color
     {
-        std::vector<uint8_t> colorChannels = getColorChannels(message);
+        std::vector<unsigned int> colorChannels = getColorChannels(message);
 
         if (colorChannels.size() == 3)
         {
@@ -18,14 +19,14 @@ public:
         }
         else
         {
-            return Color(0, 0, 0); // TODO: Name black
+            return Colors::Black;
         }
     }
 
 private:
-    static auto getColorChannels(std::string message) -> std::vector<uint8_t>
+    static auto getColorChannels(const std::string &message) -> std::vector<unsigned int>
     {
-        std::vector<uint8_t> colorChannels;
+        std::vector<unsigned int> colorChannels;
         std::stringstream s_stream(message);
 
         for (int i; s_stream >> i;)
@@ -41,7 +42,7 @@ private:
         return colorChannels;
     }
 
-    static auto getColor(std::vector<uint8_t> colorChannels) -> Color
+    static auto getColor(const std::vector<unsigned int> &colorChannels) -> Color
     {
         return Color(colorChannels[0], colorChannels[1], colorChannels[2]);
     }
