@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Arduino.h>
 #include "Color.h"
 #include "Colors.h"
+#include <Arduino.h>
 #include <sstream>
 #include <vector>
 

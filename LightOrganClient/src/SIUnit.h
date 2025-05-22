@@ -3,7 +3,7 @@
 template <typename Derived>
 class SIUnit
 {
-protected:
+private:
     const double baseValue;
     static constexpr double Milli = 1e3;
 

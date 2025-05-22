@@ -1,45 +1,44 @@
 #pragma once
 
-#include "Color.h"
-#include <FastLED.h>
-#include <vector>
-#include "LedSegment.h"
-#include "Voltage.h"
 #include "Amperage.h"
+#include "Color.h"
+#include "Configuration.h"
+#include "Voltage.h"
+#include <FastLED.h>
 
 template <unsigned int PIN>
 class LedChain
 {
 private:
-    Voltage voltage;
-    Amperage amperage;
-    std::vector<LedSegment> segments;
+    CRGB *leds;
+    const unsigned int ledCount;
+    const Voltage voltage;
+    const Amperage amperage;
 
 public:
-    LedChain(Voltage voltage, Amperage amperage, const std::vector<LedSegment> &segments)
-        : voltage(voltage), amperage(amperage), segments(segments) {}
+    LedChain(Voltage voltage, Amperage amperage, unsigned int ledCount) : voltage(voltage), amperage(amperage), ledCount(ledCount)
+    {
+        leds = new CRGB[ledCount];
+    }
+
+    LedChain(const LedChain &) = delete;
+    LedChain &operator=(const LedChain &) = delete;
 
     void setup()
     {
-        for (auto &segment : segments)
-        {
-            FastLED.addLeds<NEOPIXEL, PIN>(segment.getLeds(), segment.size());
-        }
-
+        FastLED.addLeds<NEOPIXEL, PIN>(leds, ledCount);
         FastLED.clear(true);
         FastLED.setMaxPowerInVoltsAndMilliamps(voltage.toBase(), amperage.toMilli());
-        Serial.println("LED setup complete.");
+        Serial.println("LED chain initialized.");
     }
 
     void setAllTo(Color color)
     {
-        char buffer[50]; // Buffer to hold the formatted string
-        sprintf(buffer, "Setting all pixels to R: %u, G: %u, B: %u", color.red, color.green, color.blue);
-        Serial.println(buffer);
+        Serial.printf("Setting pixels to R: %u, G: %u, B: %u \n", color.red, color.green, color.blue);
 
-        for (auto &segment : segments)
+        for (uint i = 0; i < ledCount; i++)
         {
-            segment.setAllTo(color);
+            leds[i].setRGB(color.red, color.green, color.blue);
         }
 
         FastLED.show();

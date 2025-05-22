@@ -1,13 +1,16 @@
 #pragma once
 
-#include <WiFi.h>
 #include "NetworkCredentials.h"
 #include "helpers/Wait.h"
+#include <WiFi.h>
 
 class Network
 {
+private:
+    const NetworkCredentials credentials;
+
 public:
-    Network(const NetworkCredentials &credentials) : credentials(credentials) {}
+    explicit Network(const NetworkCredentials credentials) : credentials(credentials) {}
 
     void connect()
     {
@@ -39,8 +42,6 @@ public:
     }
 
 private:
-    const NetworkCredentials &credentials;
-
     void wakeWifiHardware()
     {
         WiFi.setSleep(false);

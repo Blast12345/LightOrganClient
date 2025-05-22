@@ -1,27 +1,23 @@
 #pragma once
 
 #include "Amperage.h"
-#include "LedSegment.h"
 #include "LedChain.h"
-#include "Voltage.h"
-#include "Secrets.h"
 #include "NetworkCredentials.h"
+#include "Secrets.h"
+#include "Voltage.h"
 
-// ESP32
+// Board
 constexpr unsigned long baudRate = 115200;
 
 // LEDs
 constexpr unsigned int ledPin = 13; // I'd prefer to pass this into the constructor, but FastLEDs API does not seem to make this possible.
+constexpr unsigned int ledCount = 32;
 
-// NOLINTBEGIN(cppcoreguidelines-avoid-non-const-global-variables)
-LedChain<ledPin> ledChain = LedChain<ledPin>(
+LedChain<ledPin> ledChain(
     Voltage(5.0),
-    Amperage(1.0), {
-                       LedSegment(16), // TODO: Pass in fallback algorithm
-                       LedSegment(16),
-                   });
-// NOLINTEND(cppcoreguidelines-avoid-non-const-global-variables)
+    Amperage(1.0),
+    ledCount);
 
-// Network (see Secrets.h for WiFi credentials)
+// Network
 constexpr unsigned int serverPort = 9999;
 const NetworkCredentials networkCredentials = {Secrets::networkSSID, Secrets::networkPassword};

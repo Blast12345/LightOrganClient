@@ -18,6 +18,7 @@ def get_defects():
             "cppcheck",
             "src/",
             "--enable=all",
+            "--inline-suppr"
             "--suppress=missingIncludeSystem",
             "--suppress=checkersReport",
             "--template={file}:{line}:{column}: {severity}: {message} [{id}]"

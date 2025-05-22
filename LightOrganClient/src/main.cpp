@@ -1,12 +1,10 @@
 #include "Configuration.h"
-#include "helpers/Wait.h"
-#include "Network.h"
 #include "LOServer.h"
+#include "Network.h"
+#include "helpers/Wait.h"
 
-// NOLINTBEGIN(cppcoreguidelines-avoid-non-const-global-variables)
 Network network(networkCredentials);
 LOServer server(serverPort);
-// NOLINTEND(cppcoreguidelines-avoid-non-const-global-variables)
 
 void setup()
 {
@@ -20,6 +18,7 @@ void setup()
   Serial.println("Setup complete.");
 }
 
+// cppcheck-suppress unusedFunction
 void loop()
 {
   if (network.isDisconnected())

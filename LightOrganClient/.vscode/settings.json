@@ -66,4 +66,5 @@
             "*.{cpp,h}",
         ],
     },
+    "C_Cpp.clang_format_sortIncludes": true,
 }
