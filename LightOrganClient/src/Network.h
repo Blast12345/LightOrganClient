@@ -1,11 +1,16 @@
 #pragma once
 
+#include "NetworkCredentials.h"
+#include "helpers/Wait.h"
 #include <WiFi.h>
 
 class Network
 {
+private:
+    const NetworkCredentials credentials;
+
 public:
-    Network(const char *ssid, const char *password) : ssid(ssid), password(password) {}
+    explicit Network(const NetworkCredentials credentials) : credentials(credentials) {}
 
     void connect()
     {
@@ -13,47 +18,44 @@ public:
 
         while (isDisconnected())
         {
-            attemptToConnect(ssid, password);
-            delay(1000);
+            attemptToConnect();
+            waitOneSecond();
         }
     }
 
-    boolean isConnected()
+    auto isConnected() -> boolean
     {
         return WiFi.isConnected() == true;
     }
 
-    boolean isDisconnected()
+    auto isDisconnected() -> boolean
     {
         return WiFi.isConnected() == false;
     }
 
-private:
-    const char *const ssid;
-    const char *const password;
-
-    void wakeWifiHardware()
-    {
-        WiFi.setSleep(false);
-    }
-
-    void attemptToConnect(const char *ssid, const char *password)
-    {
-        Serial.println("Attempting to connect to WiFi...");
-        WiFi.begin(ssid, password);
-
-        if (isConnected())
-        {
-            delay(1000); // Give the device time to be assigned an IP and whatnot.
-            printConnectionInformation();
-        }
-    }
-
-    void printConnectionInformation()
+    auto printConnectionInformation() -> void
     {
         Serial.println("Connection established.");
         Serial.println("SSID: " + WiFi.SSID());
         Serial.println("Signal strength: " + String(WiFi.RSSI()) + " dBm");
         Serial.println("IP address: " + WiFi.localIP().toString());
+    }
+
+private:
+    void wakeWifiHardware()
+    {
+        WiFi.setSleep(false);
+    }
+
+    void attemptToConnect()
+    {
+        Serial.print("Attempting to connect to WiFi...");
+        WiFi.begin(credentials.ssid, credentials.password);
+
+        while (isDisconnected())
+        {
+            Serial.println(".");
+            waitOneSecond();
+        }
     }
 };

@@ -52,6 +52,19 @@
         "iomanip": "cpp",
         "chrono": "cpp",
         "ratio": "cpp",
-        "thread": "cpp"
-    }
+        "thread": "cpp",
+        "bitset": "cpp",
+        "condition_variable": "cpp",
+        "csignal": "cpp",
+        "set": "cpp",
+        "mutex": "cpp"
+    },
+    "triggerTaskOnSave.restart": true,
+    "triggerTaskOnSave.selectedTask": "Run Linters",
+    "triggerTaskOnSave.tasks": {
+        "build": [
+            "*.{cpp,h}",
+        ],
+    },
+    "C_Cpp.clang_format_sortIncludes": true,
 }

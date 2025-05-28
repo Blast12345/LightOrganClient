@@ -1,15 +1,15 @@
 #pragma once
 
-#include <Arduino.h>
 #include "Color.h"
+#include "Colors.h"
+#include <Arduino.h>
 #include <sstream>
 #include <vector>
 
 class ColorParser
 {
-
 public:
-    Color getColor(std::string message)
+    static auto getColor(const std::string &message) -> Color
     {
         std::vector<uint8_t> colorChannels = getColorChannels(message);
 
@@ -19,12 +19,12 @@ public:
         }
         else
         {
-            return createDefaultColor();
+            return Colors::Black;
         }
     }
 
 private:
-    std::vector<uint8_t> getColorChannels(std::string message)
+    static auto getColorChannels(const std::string &message) -> std::vector<uint8_t>
     {
         std::vector<uint8_t> colorChannels;
         std::stringstream s_stream(message);
@@ -42,21 +42,8 @@ private:
         return colorChannels;
     }
 
-    Color getColor(std::vector<uint8_t> colorChannels)
+    static auto getColor(const std::vector<uint8_t> &colorChannels) -> Color
     {
-        Color newColor;
-        newColor.red = colorChannels[0];
-        newColor.green = colorChannels[1];
-        newColor.blue = colorChannels[2];
-        return newColor;
-    }
-
-    Color createDefaultColor()
-    {
-        Color newColor;
-        newColor.red = 0;
-        newColor.green = 0;
-        newColor.blue = 0;
-        return newColor;
+        return Color(colorChannels[0], colorChannels[1], colorChannels[2]);
     }
 };

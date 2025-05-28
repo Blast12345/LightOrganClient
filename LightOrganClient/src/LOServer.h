@@ -1,8 +1,8 @@
 #pragma once
 
-#include <IPAddress.h>
-#include <AsyncUDP.h>
 #include "ColorParser.h"
+#include <AsyncUDP.h>
+#include <IPAddress.h>
 
 struct LOServer
 {
@@ -14,7 +14,7 @@ private:
     std::function<void(Color)> nextColorCallback;
 
 public:
-    explicit LOServer(int port) : port(port) {}
+    explicit LOServer(int port) : port(port), udp(), colorParser() {}
 
     void beginListening()
     {
@@ -23,12 +23,12 @@ public:
         startHandlingPackets();
     }
 
-    bool isListening()
+    auto isListening() const -> bool
     {
         return listening;
     }
 
-    bool isNotListening()
+    auto isNotListening() const -> bool
     {
         return !listening;
     }

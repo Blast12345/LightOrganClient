@@ -1,0 +1,16 @@
+Checks: >
+  bugprone-*, 
+  clang-analyzer-*, 
+  cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-non-const-global-variables,
+  -cppcoreguidelines-pro-type-member-init,
+  modernize-*,
+  -modernize-use-nodiscard,
+  performance-*, 
+  portability-*,
+  readability-*,
+
+# Check comments (because PIO is using an outdated version of clang-tidy which doesn't allow Checks to be a list)
+# -cppcoreguidelines-avoid-non-const-global-variables: Some globals are nearly essential in an Arduino-type project
+# -cppcoreguidelines-pro-type-member-init: The constructor should be responsible for initializing its members.
+# -modernize-use-nodiscard: There are other lint checks that should prevent unused code, so I'd rather not introduce additional syntax.
