@@ -20,7 +20,6 @@ public:
     {
         leds = new CRGB[ledCount];
     }
-
     LedChain(const LedChain &) = delete;
     LedChain &operator=(const LedChain &) = delete;
 

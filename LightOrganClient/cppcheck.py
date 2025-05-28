@@ -18,13 +18,12 @@ def get_defects():
             "cppcheck",
             "src/",
             "--enable=all",
-            "--inline-suppr"
+            "--inline-suppr",
             "--suppress=missingIncludeSystem",
             "--suppress=checkersReport",
             "--template={file}:{line}:{column}: {severity}: {message} [{id}]"
         ],
         stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE,
         text=True
     )
     return result.stderr.splitlines()
