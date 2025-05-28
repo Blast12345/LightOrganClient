@@ -11,7 +11,7 @@ class ColorParser
 public:
     static auto getColor(const std::string &message) -> Color
     {
-        std::vector<unsigned int> colorChannels = getColorChannels(message);
+        std::vector<uint8_t> colorChannels = getColorChannels(message);
 
         if (colorChannels.size() == 3)
         {
@@ -24,9 +24,9 @@ public:
     }
 
 private:
-    static auto getColorChannels(const std::string &message) -> std::vector<unsigned int>
+    static auto getColorChannels(const std::string &message) -> std::vector<uint8_t>
     {
-        std::vector<unsigned int> colorChannels;
+        std::vector<uint8_t> colorChannels;
         std::stringstream s_stream(message);
 
         for (int i; s_stream >> i;)
@@ -42,7 +42,7 @@ private:
         return colorChannels;
     }
 
-    static auto getColor(const std::vector<unsigned int> &colorChannels) -> Color
+    static auto getColor(const std::vector<uint8_t> &colorChannels) -> Color
     {
         return Color(colorChannels[0], colorChannels[1], colorChannels[2]);
     }
