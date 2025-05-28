@@ -7,7 +7,7 @@
                 "Run PlatformIO Check",
                 "Run CppCheck"
             ],
-            "dependsOrder": "sequence", // We must run sequentially to incorrect placement of squigglies
+            "dependsOrder": "sequence", // We must run sequentially to avoid incorrect placement of squigglies
             "group": {
                 "kind": "build",
                 "isDefault": true
