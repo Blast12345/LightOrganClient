@@ -24,6 +24,7 @@ def get_defects():
             "--template={file}:{line}:{column}: {severity}: {message} [{id}]"
         ],
         stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE,
         text=True
     )
     return result.stderr.splitlines()

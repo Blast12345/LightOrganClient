@@ -6,6 +6,8 @@
 #include "Secrets.h"
 #include "Voltage.h"
 
+// TODO: Maybe have a separate set of classes for segments/chains that prepare results for the LedLibrary.
+
 // Board
 constexpr unsigned long baudRate = 115200;
 
