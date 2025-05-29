@@ -1,6 +1,6 @@
 #include "Configuration.h"
-#include "LOServer.h"
-#include "Network.h"
+#include "networking/LOServer.h"
+#include "networking/Network.h"
 #include "helpers/Wait.h"
 
 Network network(networkCredentials);

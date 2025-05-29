@@ -16,6 +16,7 @@ def get_defects():
     result = subprocess.run(
         [
             "cppcheck",
+            "-Isrc",  # Added to prevent false-positives for missing includes
             "src/",
             "--enable=all",
             "--inline-suppr",
