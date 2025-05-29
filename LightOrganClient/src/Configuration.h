@@ -1,10 +1,10 @@
 #pragma once
 
-#include "leds/LedChain.h"
-#include "networking/NetworkCredentials.h"
 #include "Secrets.h"
 #include "helpers/measurements/Amperage.h"
 #include "helpers/measurements/Voltage.h"
+#include "leds/LedChain.h"
+#include "networking/NetworkCredentials.h"
 
 // TODO: Maybe have a separate set of classes for segments/chains that prepare results for the LedLibrary.
 
@@ -16,9 +16,9 @@ constexpr unsigned int ledPin = 13; // I'd prefer to pass this into the construc
 constexpr unsigned int ledCount = 32;
 
 LedChain<ledPin> ledChain(
+    ledCount,
     Voltage(5.0),
-    Amperage(1.0),
-    ledCount);
+    Amperage(1.0));
 
 // Network
 constexpr unsigned int serverPort = 9999;

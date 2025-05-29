@@ -1,9 +1,9 @@
 #pragma once
 
-#include <FastLED.h>
 #include "colors/Color.h"
 #include "helpers/measurements/Amperage.h"
 #include "helpers/measurements/Voltage.h"
+#include <FastLED.h>
 
 template <unsigned int PIN>
 class LedChain
@@ -15,7 +15,7 @@ private:
     const Amperage amperage;
 
 public:
-    LedChain(Voltage voltage, Amperage amperage, unsigned int ledCount) : voltage(voltage), amperage(amperage), ledCount(ledCount)
+    LedChain(unsigned int ledCount, Voltage voltage, Amperage amperage) : ledCount(ledCount), voltage(voltage), amperage(amperage)
     {
         leds = new CRGB[ledCount];
     }
