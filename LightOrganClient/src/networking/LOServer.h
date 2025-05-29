@@ -1,8 +1,7 @@
 #pragma once
 
-#include "ColorParser.h"
+#include "colors/ColorParser.h"
 #include <AsyncUDP.h>
-#include <IPAddress.h>
 
 struct LOServer
 {

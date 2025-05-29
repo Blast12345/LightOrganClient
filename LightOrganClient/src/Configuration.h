@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Amperage.h"
-#include "LedChain.h"
-#include "NetworkCredentials.h"
+#include "leds/LedChain.h"
+#include "networking/NetworkCredentials.h"
 #include "Secrets.h"
-#include "Voltage.h"
+#include "helpers/measurements/Amperage.h"
+#include "helpers/measurements/Voltage.h"
 
 // TODO: Maybe have a separate set of classes for segments/chains that prepare results for the LedLibrary.
 
